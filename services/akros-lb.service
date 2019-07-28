@@ -16,7 +16,7 @@ Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm "akros-lb"
 
-ExecStart=/usr/bin/podman run --name akros-lb --net host -v /opt/haproxy:/usr/local/etc/haproxy:ro haproxy
+ExecStart=/usr/bin/podman run --name akros-lb --net host -v /opt/haproxy:/etc/haproxy:ro quay.io/wcaban/haproxy
 
 ExecReload=-/usr/bin/podman stop "akros-lb"
 ExecReload=-/usr/bin/podman rm "akros-lb"

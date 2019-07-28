@@ -9,4 +9,4 @@ RUN microdnf install --nodocs -y haproxy && \
 LABEL   io.k8s.display-name="HAProxy" \
         io.k8s.description="HAProxy Proxy Server"
 
-ENTRYPOINT [ "/usr/sbin/haproxy","-Ws -f $CONFIG","-p $PIDFILE" ]
+ENTRYPOINT [ "/usr/sbin/haproxy","-f $CONFIG","-p $PIDFILE","-W -db -V" ]
