@@ -1,0 +1,29 @@
+#
+# Copy (chmod 664) to /etc/systemd/system/akros-lb.service
+#
+# systemctl daemon-reload
+# systemctl start akros-lb
+# systemctl status akros-lb
+# systemctl enable akros-lb
+#
+
+[Unit]
+Description=NGINX Web Server
+After=network.target syslog.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman rm "akros-lb"
+
+ExecStart=/usr/bin/podman run --name akros-lb --net host -v /opt/haproxy:/usr/local/etc/haproxy:ro haproxy
+
+ExecReload=-/usr/bin/podman stop "akros-lb"
+ExecReload=-/usr/bin/podman rm "akros-lb"
+ExecStop=-/usr/bin/podman stop "akros-lb"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,12 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+
+ENV CONFIG  /etc/haproxy/haproxy.cfg
+ENV PIDFILE /run/haproxy.pid
+
+RUN microdnf install --nodocs -y haproxy && \
+    microdnf clean all
+
+LABEL   io.k8s.display-name="HAProxy" \
+        io.k8s.description="HAProxy Proxy Server"
+
+ENTRYPOINT [ "/usr/sbin/haproxy","-Ws -f $CONFIG","-p $PIDFILE" ]
