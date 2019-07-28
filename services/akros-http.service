@@ -8,7 +8,7 @@
 #
 
 [Unit]
-Description=OpenShift POC HTTP for PXE Config
+Description=NGINX Web Server
 After=network.target syslog.target
 
 [Service]
