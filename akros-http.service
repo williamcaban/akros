@@ -1,0 +1,29 @@
+#
+# Copy (chmod 664) to /etc/systemd/system/akros-http.service
+#
+# systemctl daemon-reload
+# systemctl start akros-http
+# systemctl status akros-http
+# systemctl enable akros-http
+#
+
+[Unit]
+Description=OpenShift POC HTTP for PXE Config
+After=network.target syslog.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman rm "akros-http"
+
+ExecStart=/usr/bin/podman run --name akros-http -p 8000:80 -v /opt/nginx/html:/usr/share/nginx/html:ro quay.io/wcaban/nginx
+
+ExecReload=-/usr/bin/podman stop "akros-http"
+ExecReload=-/usr/bin/podman rm "akros-http"
+ExecStop=-/usr/bin/podman stop "akros-http"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+

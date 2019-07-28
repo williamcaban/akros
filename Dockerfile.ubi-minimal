@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+
+RUN microdnf install --nodocs -y nginx && \
+    microdnf clean all
+
+LABEL   io.k8s.display-name="NGINX" \
+        io.k8s.description="NGINX Web Server"
+
+ENTRYPOINT [ "/usr/sbin/nginx" ]
