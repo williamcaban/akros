@@ -3,10 +3,12 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal
 ENV CONFIG  /etc/haproxy/haproxy.cfg
 ENV PIDFILE /run/haproxy.pid
 
+# NOTE: For debuging add: iptools procps
 RUN microdnf install --nodocs -y haproxy && \
     microdnf clean all
 
 LABEL   io.k8s.display-name="HAProxy" \
         io.k8s.description="HAProxy Proxy Server"
 
-ENTRYPOINT [ "/usr/sbin/haproxy","-f $CONFIG","-p $PIDFILE","-W -db -V" ]
+# Using shell form for variable substitution
+ENTRYPOINT /usr/sbin/haproxy -f $CONFIG -p $PIDFILE -W -db -V
