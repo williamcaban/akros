@@ -1,0 +1,17 @@
+
+FROM quay.io/fedora/fedora:31-x86_64
+
+ENV NAMEDCONF   /etc/named.conf
+ENV OPTIONS     ""
+ENV KRB5_KTNAME /etc/named.keytab
+
+RUN dnf install --nodocs -y bind-dlz-bdb bind-dlz-ldap bind-dlz-mysql \
+    bind-dlz-mysqldyn bind-dlz-sqlite3 bind-dlz-filesystem && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf 
+
+LABEL io.k8s.display-name="BIND" \
+    io.k8s.description="This BIND + BIND-DLZ Name Server."
+
+# Using shell mode for env vars substitution
+ENTRYPOINT /usr/sbin/named -g -u named -c ${NAMEDCONF} ${OPTIONS}
