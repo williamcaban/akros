@@ -5,10 +5,11 @@
 # systemctl status akros-dns
 # systemctl enable akros-dns
 #
-# podman pull coredns/coredns
+# podman pull quay.io/wcaban/bind
+# mkdir -pv /opt/bind/named
 
 [Unit]
-Description=CoreDNS DNS Server
+Description=Bind DNS Server
 After=network.target syslog.target
 
 [Service]
@@ -16,16 +17,19 @@ Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm "akros-dns"
 
-ExecStart=/usr/bin/podman run --name akros-dns -p 53:53/udp -v /opt/coredns/Corefile:/Corefile:ro -v /opt/coredns/zones:/zones:ro coredns/coredns
+ExecStart=/usr/bin/podman run --name akros-dns -p 53:53/udp \
+    -v /opt/bind/named.conf:/etc/named.conf:ro \
+    -v /opt/bind/named.master.zone:/etc/named/named.master.zone:ro \
+    -v /opt/bind/named.in-addr.arpa.zone:/etc/named/named.in-addr.arpa.zone:ro \
+    -v /opt/bind/forward-dns.zone:/var/lib/named/forward-dns.zone:ro \
+    -v /opt/bind/reverse-dns.zone:/var/lib/named/reverse-dns.zone:ro \
+    quay.io/wcaban/bind
 
 ExecReload=-/usr/bin/podman stop "akros-dns"
-ExecReload=-/usr/bin/podman rm "akros-dns"
-ExecStop=-/usr/bin/podman stop "akros-dns"
+ExecReload=-/usr/bin/podman rm   "akros-dns"
+ExecStop=-/usr/bin/podman   stop "akros-dns"
 Restart=always
 RestartSec=30
 
 [Install]
 WantedBy=multi-user.target
-
-#### NOTES
-# podman run --rm --name akros-dns -p 53:53 -v /opt/coredns/Corefile:/Corefile:ro coredns/coredns -conf /Corefile 

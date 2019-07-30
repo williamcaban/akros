@@ -1,0 +1,28 @@
+; /var/named/reverse-dns.in-addr.arpa
+$TTL 1h
+$ORIGIN 1.168.192.IN-ADDR.ARPA.
+
+@   1h  IN SOA  akros.example.com.  root.akros.example.com. (
+            2019073001  ; serial
+            2H          ; refresh
+            15          ; retry
+            1D          ; expiry
+            2H )        ; minimum
+
+            IN NS       dns-01.akros.example.com.
+;            IN NS       dns-02.akros.example.com.
+
+1       IN PTR  dns-01.example.com.
+;2       IN PTR  dns-02.example.com.
+
+10      IN PTR  endpoint-10.akros.example.com.
+11      IN PTR  endpoint-11.akros.example.com.
+12      IN PTR  endpoint-12.akros.example.com.
+13      IN PTR  endpoint-13.akros.example.com.
+14      IN PTR  endpoint-14.akros.example.com.
+15      IN PTR  endpoint-15.akros.example.com.
+16      IN PTR  endpoint-16.akros.example.com.
+17      IN PTR  endpoint-17.akros.example.com.
+18      IN PTR  endpoint-18.akros.example.com.
+19      IN PTR  endpoint-19.akros.example.com.
+20      IN PTR  endpoint-20.akros.example.com.

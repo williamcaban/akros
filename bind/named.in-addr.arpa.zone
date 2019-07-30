@@ -1,0 +1,6 @@
+// /etc/named/named.in-addr.arpa.zone
+zone "1.168.192.in-addr.arpa" IN {
+    type master;
+    file "reverse-dns.zone";
+    allow-update { none; };
+};

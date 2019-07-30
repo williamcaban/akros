@@ -1,0 +1,36 @@
+; /var/named/forward-dns.zone
+$TTL 1h
+$ORIGIN akros.example.com.
+
+@   1h  IN SOA  akros.example.com.  root.akros.example.com. (
+            2019073001  ; serial
+            2H          ; refresh
+            15          ; retry
+            1D          ; expiry
+            2H )        ; minimum
+
+            IN NS       dns-01.akros.example.com.
+            IN A        192.168.1.1
+;            IN NS       dns-02.akros.example.com.
+;            IN A        192.168.1.2
+
+; Ancillary services
+endpoint-10 IN A        192.168.1.10
+endpoint-11 IN A        192.168.1.11
+endpoint-12 IN A        192.168.1.12
+endpoint-13 IN A        192.168.1.13
+endpoint-14 IN A        192.168.1.14
+endpoint-15 IN A        192.168.1.15
+endpoint-16 IN A        192.168.1.16
+endpoint-17 IN A        192.168.1.17
+endpoint-18 IN A        192.168.1.18
+endpoint-19 IN A        192.168.1.19
+endpoint-20 IN A        192.168.1.120
+
+;_SERVICE._PROTOCOL.yourdomain.tld  IN SRV PRIORITY WEIGHT PORT   SERVER
+_akros-api._tcp.akros.example.com.  IN SRV 0        0      10999  endpoint-10.akros.example.com.
+                                    IN SRV 0        0      10999  endpoint-11.akros.example.com.
+                                    IN SRV 0        0      10999  endpoint-12.akros.example.com.
+
+apps        IN CNAME    endpoint-10
+*.apps      IN CNAME    endpoint-10 

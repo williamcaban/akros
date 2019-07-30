@@ -1,0 +1,6 @@
+// /etc/named/named.master.zone
+zone "akros.example.com" IN {
+    type master;
+    file "forward-dns.zone";
+    allow-update { none; };
+};

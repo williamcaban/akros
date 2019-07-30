@@ -1,0 +1,31 @@
+# Copy (chmod 664) to /etc/systemd/system/akros-coredns.service
+#
+# systemctl daemon-reload
+# systemctl start akros-coredns
+# systemctl status akros-coredns
+# systemctl enable akros-coredns
+#
+# podman pull coredns/coredns
+
+[Unit]
+Description=CoreDNS DNS Server
+After=network.target syslog.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman rm "akros-coredns"
+
+ExecStart=/usr/bin/podman run --name akros-coredns -p 53:53/udp -v /opt/coredns/Corefile:/Corefile:ro -v /opt/coredns/zones:/zones:ro coredns/coredns
+
+ExecReload=-/usr/bin/podman stop "akros-coredns"
+ExecReload=-/usr/bin/podman rm "akros-coredns"
+ExecStop=-/usr/bin/podman stop "akros-coredns"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+
+#### NOTES
+# podman run --rm --name akros-coredns -p 53:53 -v /opt/coredns/Corefile:/Corefile:ro coredns/coredns -conf /Corefile 
